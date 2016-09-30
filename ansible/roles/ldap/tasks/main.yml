@@ -1,0 +1,55 @@
+# tasks file for ldap
+- debug: msg="Will install httpd+ldap"
+
+# Disable iptables for task
+- name: disable iptables
+  service: name=iptables enabled=no state=stopped
+
+# Install Apache 
+- name: install the latest version of Apache
+  yum: name=httpd state=latest
+ 
+# Install LDAP
+- name: install openldap
+  yum: name={{ item }} state=present
+  with_items:
+    - openldap-servers
+    - openldap-clients
+
+- name: Copy db config config
+  template: src=DB_CONFIG.example dest=/var/lib/ldap/DB_CONFIG
+ 
+- shell: chown -R ldap:ldap /var/lib/ldap; cd /etc/openldap; mv slapd.d slapd.d.original
+
+- name: Copy slapd Config
+  template: src=slapd.conf dest=/etc/openldap/slapd.conf
+
+- shell: chown -R ldap:ldap /var/lib/ldap
+
+# Start slapd 
+- name: start slapd
+  service: name=slapd enabled=yes state=started
+
+- name: Copy ldap-init config config
+  template: src=ldap-init.ldif dest=/etc/openldap/ldap-init.ldif
+
+- shell: ldapadd -x -D "cn=admin,dc=mnt,dc=lab" -w Mp2341943 -f /etc/openldap/ldap-init.ldif
+
+- name: Copy ldap-user config config
+  template: src=ldap-userinldap.ldif dest=/etc/openldap/ldap-userinldap.ldif
+
+- shell: ldapadd -x -D "cn=admin,dc=mnt,dc=lab" -w Mp2341943 -f /etc/openldap/ldap-userinldap.ldif
+
+# Install phpldap packages
+- name: install phpldap packeges
+  yum: pkg={{ item }} state=installed
+  with_items:
+    - http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    - phpldapadmin
+
+- name: Copy ldap-user config config
+  template: src=phpldapadmin.conf dest=/etc/httpd/conf.d/phpldapadmin.conf
+
+- name: Copy ldap-user config config
+  template: src=config.php dest=/etc/phpldapadmin/config.php
+  notify: start httpd

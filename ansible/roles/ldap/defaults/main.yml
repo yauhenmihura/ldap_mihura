@@ -1,0 +1,18 @@
+---
+# defaults file for zabbix
+
+# Variables for template zabbix_server.conf
+db_host: "localhost"
+db_name: "zabbix"
+dbp_user: "zabbix"
+dbp_password: "zabbix"
+
+# Variables for template httpd.conf
+httpd_root: "/usr/share/zabbix"
+
+# Variables for template my.cnf
+innodb_home_dir: "/opt/mysql"
+
+# Variables for template zabbix.conf
+date_timezone: "Europe/Minsk"
+
