@@ -10,3 +10,9 @@
 
 <br><b>3. Screenshot of phpLDAPadmin</b></br>
 ![imgs](pic/2.png "imgs")
+
+<br><b>ANSIBLE</b></br>
+![imgs](pic/ansible.png "imgs")
+<br><b>CHECK</b></br>
+![imgs](pic/ansible1.png "imgs")
+
