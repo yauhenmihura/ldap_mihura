@@ -1,4 +1,4 @@
-# Task3 zabbix_mihura
+# Task1 ldap_mihura
 
 <br><b>1. Screenshot of slapd running process</b></br>
 <b>2. Screenshot of successfully executed commands</b>
